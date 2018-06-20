@@ -57,6 +57,7 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPTableroMouseClicked"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jPTableroKeyPressed"/>
       </Events>
 
       <Layout>
@@ -133,11 +134,17 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTTiempo">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTTiempoActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTPuntaje">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTPuntajeActionPerformed"/>
           </Events>

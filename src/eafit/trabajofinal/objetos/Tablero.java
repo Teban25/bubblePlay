@@ -11,7 +11,7 @@ public class Tablero {
     private Bolita tableroBolita[][];
     private Colores coloresJuego;
     private int bolitasX, bolitasY;
-    
+    private final Random aleatorio;
     
 
     //METODOS
@@ -22,7 +22,7 @@ public class Tablero {
         coloresJuego = new Colores(cantidadColores);
         this.bolitasX = bolitasX;
         this.bolitasY = bolitasY;
-    
+        aleatorio = new Random(System.currentTimeMillis());
     
     }
     
@@ -74,15 +74,14 @@ public class Tablero {
         this.bolitasY = bolitasY;
     }
     
-    
-    
-    
     public void llenarTablero(){
-        int coordX = 10;
+        int coordX = 40;
         int coordY = 20;
         int sizeX = tableroBolita.length;
         int sizeY = tableroBolita[0].length;
-        Random aleatorio = new Random(System.currentTimeMillis());
+        if(sizeX<5){
+            coordX = 80;
+        }
         for(int i = 0; i<sizeX; i++){
             for(int j = 0; j<sizeY; j++){
                 int numeroColor = aleatorio.nextInt(coloresJuego.getCantidadColores());
@@ -95,5 +94,47 @@ public class Tablero {
             coordY = 20;
         }
 
+    }
+    
+    public Color generarColor(){
+        int numeroColor = aleatorio.nextInt(coloresJuego.getCantidadColores());
+        return coloresJuego.getColor(numeroColor);
+    }
+    
+    public Bolita buscarBolita(int x, int y){
+        Bolita bolitaBuscada = null;
+        
+        int sizeX = tableroBolita.length;
+        int sizeY = tableroBolita[0].length;
+        for(int i=0; i<sizeX; i++){
+            for (int j=0; j<sizeY; j++){
+                Bolita bolita = tableroBolita[i][j];
+                double distanciaX = Math.pow(x-bolita.getX(), 2);
+                double distanciaY = Math.pow(y-bolita.getY(), 2);
+                double distancia = Math.sqrt(distanciaY + distanciaX);
+                
+                if(distancia <= (Bolita.getRadio() - 15)){
+                    bolitaBuscada = bolita;
+                    return bolitaBuscada;
+                }
+            }
+        }
+            
+        return bolitaBuscada;    
+    }
+    
+    public void actualizarBolita(Bolita bolita){
+        int sizeX = tableroBolita.length;
+        int sizeY = tableroBolita[0].length;
+        recorreTablero:
+        for(int i=0; i<sizeX; i++){
+            for(int j=0; j<sizeY; j++){
+                if(tableroBolita[i][j].getX()==bolita.getX()&&
+                        tableroBolita[i][j].getY()==bolita.getY()){
+                    tableroBolita[i][j] = bolita;
+                    break recorreTablero;
+                }
+            }
+        }
     }
 }

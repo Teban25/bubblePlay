@@ -5,10 +5,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- *
- * @author davigofr
- */
+
 public class Colores {
     //ATRIBUTO
     private int cantidadColores;
@@ -60,5 +57,17 @@ public class Colores {
         }
     }
     
+    public static final int getPuntajeXColor(String nombreColor){
+        int puntaje;
+        switch (nombreColor){
+                
+                case "GREEN":
+                    puntaje = 30;
+                    break;
+                default:
+                    puntaje = 0;
+        }            
+        return puntaje; 
+    }
     
 }

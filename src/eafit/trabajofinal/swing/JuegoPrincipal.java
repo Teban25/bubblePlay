@@ -1,29 +1,23 @@
 
 package eafit.trabajofinal.swing;
 
-import eafit.trabajofinal.logicajuego.InicializarJuego;
+import eafit.trabajofinal.logicajuego.AdministracionJuego;
 import eafit.trabajofinal.objetos.Bolita;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 
 public class JuegoPrincipal extends javax.swing.JFrame {
-    private InicializarJuego playJuego;
-
+    private AdministracionJuego playJuego;
+    private static final int ajustadorRadio = 4;
+    private static final int ajustadorCoord =17;
     public JuegoPrincipal() {
         initComponents();
         playJuego = Inicio.getPlayJuego();
-        pintarTablero(jPTablero.getGraphics());
-        pintarCirculo(jPTablero.getGraphics());
     }
     
-    private void pintarCirculo(Graphics g){
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.GREEN);
-        g2d.fillOval(10, 30, 30, 30);
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -43,6 +37,11 @@ public class JuegoPrincipal extends javax.swing.JFrame {
         jPTablero.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPTableroMouseClicked(evt);
+            }
+        });
+        jPTablero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPTableroKeyPressed(evt);
             }
         });
 
@@ -70,12 +69,14 @@ public class JuegoPrincipal extends javax.swing.JFrame {
 
         jLPuntaje.setText("Puntaje:");
 
+        jTTiempo.setEditable(false);
         jTTiempo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTTiempoActionPerformed(evt);
             }
         });
 
+        jTPuntaje.setEditable(false);
         jTPuntaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTPuntajeActionPerformed(evt);
@@ -150,19 +151,23 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTPuntajeActionPerformed
 
     private void jPTableroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPTableroMouseClicked
-        Graphics2D dibujador = (Graphics2D)jPTablero.getGraphics();
-        double distanciaX = Math.pow(evt.getX() - 60, 2);
-        double distanciaY = Math.pow(evt.getY() - 20, 2);
-        double distancia = Math.sqrt(distanciaX + distanciaY);
-        if(distancia <= Bolita.getRadio()){
-            // crear metodo para definir si es un movimiento permitido
-            // crear metodo para seleccionar bolita
-            // crear metodo para almacenar la bolita que posiblimente sera borrada
-            dibujador.setColor(Color.BLACK);
-            dibujador.setStroke(new BasicStroke(2));
-            dibujador.drawOval(60, 20, 30, 30);
+        if (evt.getButton() == MouseEvent.BUTTON1) {
+            Graphics2D dibujador = (Graphics2D) jPTablero.getGraphics();
+            boolean movimientoPermitido = playJuego.validarMovimiento(evt.getX(), evt.getY());
+            if (movimientoPermitido) {
+                pintarSeleccionadas(dibujador);
+            } else {
+                borrarSeleccionadas(dibujador);
+            }
+        }else if(evt.getButton()==MouseEvent.BUTTON3){
+            Graphics2D dibujador = (Graphics2D) jPTablero.getGraphics();
+            finalizarJugada(dibujador);
         }
     }//GEN-LAST:event_jPTableroMouseClicked
+
+    private void jPTableroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPTableroKeyPressed
+       
+    }//GEN-LAST:event_jPTableroKeyPressed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -204,14 +209,65 @@ public class JuegoPrincipal extends javax.swing.JFrame {
             for(int j=0; j<playJuego.getTablero().getBolitasY(); j++){
                 Bolita bolita = playJuego.getTablero().getTableroBolita()[i][j];
                 dibujador.setColor(bolita.getColor());
-                dibujador.fillOval(bolita.getX(), bolita.getY(), Bolita.getRadio(), Bolita.getRadio());
+                dibujador.fillOval(bolita.getX() - 15, bolita.getY() - 15, Bolita.getRadio(), Bolita.getRadio());
             }
-        
         }
-    
     }
     
+    private void pintarSeleccionadas(Graphics g){
+        Graphics2D dibujador = (Graphics2D) g;
+        dibujador.setColor(Color.BLACK);
+        dibujador.setStroke(new BasicStroke(2));
+        int cantidadSeleccionadas = playJuego.getBolitasSeleccionadas().size();
+        for(int i=0; i<cantidadSeleccionadas; i++){
+            dibujador.drawOval(playJuego.getBolitasSeleccionadas().get(i).getX() - 15,
+                    playJuego.getBolitasSeleccionadas().get(i).getY() - 15,
+                    Bolita.getRadio(), Bolita.getRadio());
+        }
+    }
     
+    private void borrarSeleccionadas(Graphics g){
+        Graphics2D dibujador = (Graphics2D) g;
+        int cantidadSeleccionadas = playJuego.getBolitasSeleccionadas().size();
+        for(int i=0; i<cantidadSeleccionadas; i++){
+            Bolita bolita = playJuego.getBolitasSeleccionadas().get(i);
+            borrarBolita(bolita, dibujador);
+        }
+        for(int i=0; i<cantidadSeleccionadas; i++){
+            Bolita bolita = playJuego.getBolitasSeleccionadas().get(i);
+            pintarBolita(bolita, dibujador);
+        }
+        playJuego.limpiarBolitasSeleccionadas();
+    }
+    
+    private void borrarBolita(Bolita bolita, Graphics2D g){
+        g.setColor(Color.WHITE);
+        g.setStroke(new BasicStroke(2));
+        g.fillOval(bolita.getX()-ajustadorCoord, bolita.getY()-ajustadorCoord, 
+                Bolita.getRadio()+ajustadorRadio, Bolita.getRadio()+ajustadorRadio);
+    }
+    
+    private void pintarBolita(Bolita bolita, Graphics2D g){
+        g.setColor(bolita.getColor());
+        g.setStroke(new BasicStroke(0));
+        g.fillOval(bolita.getX() - 15, bolita.getY() - 15, Bolita.getRadio(), Bolita.getRadio());
+    }
+    
+    private void finalizarJugada(Graphics g) {
+        Graphics2D dibujador = (Graphics2D) g;
+        int cantidadSeleccionadas = playJuego.getBolitasSeleccionadas().size();
+        if (cantidadSeleccionadas > 1) {
+            for (int i = 0; i < cantidadSeleccionadas; i++) {
+                Color colorNuevo = playJuego.getTablero().generarColor();
+                Bolita bolita = playJuego.getBolitasSeleccionadas().get(i);
+                bolita.setColor(colorNuevo);
+                playJuego.getTablero().actualizarBolita(bolita);
+                borrarBolita(bolita, dibujador);
+                pintarBolita(bolita, dibujador);
+            }
+            playJuego.limpiarBolitasSeleccionadas();
+        }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBPlayJuego;

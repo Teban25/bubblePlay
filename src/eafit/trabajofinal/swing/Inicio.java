@@ -1,12 +1,12 @@
 package eafit.trabajofinal.swing;
 
 
-import eafit.trabajofinal.logicajuego.InicializarJuego;
+import eafit.trabajofinal.logicajuego.AdministracionJuego;
 
 
 public class Inicio extends javax.swing.JFrame {
 
-    private static InicializarJuego playJuego;
+    private static AdministracionJuego playJuego;
     
     public Inicio() {
         initComponents();
@@ -79,7 +79,7 @@ public class Inicio extends javax.swing.JFrame {
         int bolitasY = Integer.parseInt(jTFbolitasY.getText());
         int cantidadColores = 4;
         
-        playJuego = new InicializarJuego();
+        playJuego = new AdministracionJuego();
         playJuego.crearTablero(bolitasX, bolitasY, cantidadColores);
         JuegoPrincipal juego = new JuegoPrincipal();
         juego.setSize(playJuego.getTablero().getAncho(), playJuego.getTablero().getLargo());
@@ -122,7 +122,7 @@ public class Inicio extends javax.swing.JFrame {
         });
     }
 
-    public static InicializarJuego getPlayJuego() {
+    public static AdministracionJuego getPlayJuego() {
         return playJuego;
     }
 
