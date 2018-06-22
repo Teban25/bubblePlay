@@ -3,6 +3,7 @@ package eafit.trabajofinal.swing;
 
 import eafit.trabajofinal.logicajuego.AdministracionJuego;
 import eafit.trabajofinal.objetos.Bolita;
+import eafit.trabajofinal.objetos.Colores;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,11 +12,13 @@ import java.awt.event.MouseEvent;
 
 public class JuegoPrincipal extends javax.swing.JFrame {
     private AdministracionJuego playJuego;
+    private int puntaje = 0;
     private static final int ajustadorRadio = 4;
     private static final int ajustadorCoord =17;
     public JuegoPrincipal() {
         initComponents();
         playJuego = Inicio.getPlayJuego();
+        jTPuntaje.setText(String.valueOf(puntaje));
     }
     
     @SuppressWarnings("unchecked")
@@ -151,8 +154,8 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTPuntajeActionPerformed
 
     private void jPTableroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPTableroMouseClicked
+       Graphics2D dibujador = (Graphics2D) jPTablero.getGraphics();
         if (evt.getButton() == MouseEvent.BUTTON1) {
-            Graphics2D dibujador = (Graphics2D) jPTablero.getGraphics();
             boolean movimientoPermitido = playJuego.validarMovimiento(evt.getX(), evt.getY());
             if (movimientoPermitido) {
                 pintarSeleccionadas(dibujador);
@@ -160,7 +163,6 @@ public class JuegoPrincipal extends javax.swing.JFrame {
                 borrarSeleccionadas(dibujador);
             }
         }else if(evt.getButton()==MouseEvent.BUTTON3){
-            Graphics2D dibujador = (Graphics2D) jPTablero.getGraphics();
             finalizarJugada(dibujador);
         }
     }//GEN-LAST:event_jPTableroMouseClicked
@@ -264,7 +266,11 @@ public class JuegoPrincipal extends javax.swing.JFrame {
                 playJuego.getTablero().actualizarBolita(bolita);
                 borrarBolita(bolita, dibujador);
                 pintarBolita(bolita, dibujador);
+                
+                int puntajeBolita = Colores.getPuntajeXColor(bolita.getColor());
+                puntaje = puntaje + puntajeBolita;
             }
+            jTPuntaje.setText(String.valueOf(puntaje));
             playJuego.limpiarBolitasSeleccionadas();
         }
     }

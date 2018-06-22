@@ -57,17 +57,20 @@ public class Colores {
         }
     }
     
-    public static final int getPuntajeXColor(String nombreColor){
-        int puntaje;
-        switch (nombreColor){
-                
-                case "GREEN":
-                    puntaje = 30;
-                    break;
-                default:
-                    puntaje = 0;
-        }            
-        return puntaje; 
+    public static final int getPuntajeXColor(Color colorSelec){
+        int puntaje = 0;
+        if(Color.BLUE == colorSelec){
+            puntaje = 30;
+        }
+        if(Color.RED == colorSelec){
+            puntaje = 40;
+        }
+        if(Color.GREEN == colorSelec){
+            puntaje = 45;
+        } if(Color.YELLOW == colorSelec){
+            puntaje = 35;
+        }
+        return puntaje;
     }
     
 }
