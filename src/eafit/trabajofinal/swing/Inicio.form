@@ -24,7 +24,9 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="220" max="32767" attributes="0"/>
+              <EmptySpace pref="94" max="32767" attributes="0"/>
+              <Component id="jBPuntajes" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
               <Component id="iniciarJuego" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
           </Group>
@@ -57,7 +59,10 @@
                   <Component id="jTFbolitasY" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-              <Component id="iniciarJuego" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="iniciarJuego" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBPuntajes" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -85,6 +90,14 @@
     <Component class="javax.swing.JTextField" name="jTFbolitasX">
     </Component>
     <Component class="javax.swing.JTextField" name="jTFbolitasY">
+    </Component>
+    <Component class="javax.swing.JButton" name="jBPuntajes">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PUNTAJES"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBPuntajesActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

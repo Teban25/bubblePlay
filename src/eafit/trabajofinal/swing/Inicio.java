@@ -21,6 +21,7 @@ public class Inicio extends javax.swing.JFrame {
         jLbolitasX = new javax.swing.JLabel();
         jTFbolitasX = new javax.swing.JTextField();
         jTFbolitasY = new javax.swing.JTextField();
+        jBPuntajes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -35,12 +36,21 @@ public class Inicio extends javax.swing.JFrame {
 
         jLbolitasX.setText("BOLITAS HORIZONTALES:");
 
+        jBPuntajes.setText("PUNTAJES");
+        jBPuntajes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBPuntajesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(220, Short.MAX_VALUE)
+                .addContainerGap(94, Short.MAX_VALUE)
+                .addComponent(jBPuntajes)
+                .addGap(43, 43, 43)
                 .addComponent(iniciarJuego)
                 .addGap(71, 71, 71))
             .addGroup(layout.createSequentialGroup()
@@ -66,7 +76,9 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(jLbolitasY)
                     .addComponent(jTFbolitasY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
-                .addComponent(iniciarJuego)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(iniciarJuego)
+                    .addComponent(jBPuntajes))
                 .addGap(83, 83, 83))
         );
 
@@ -88,6 +100,13 @@ public class Inicio extends javax.swing.JFrame {
         juego.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_iniciarJuegoActionPerformed
+
+    private void jBPuntajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPuntajesActionPerformed
+         Puntajes puntajes = new Puntajes();
+           puntajes.setResizable(false);
+        puntajes.setLocation(400, 150);
+        puntajes.setVisible(true);
+    }//GEN-LAST:event_jBPuntajesActionPerformed
 
 
     public static void main(String args[]) {
@@ -128,6 +147,7 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton iniciarJuego;
+    private javax.swing.JButton jBPuntajes;
     private javax.swing.JLabel jLbolitasX;
     private javax.swing.JLabel jLbolitasY;
     private javax.swing.JTextField jTFbolitasX;
