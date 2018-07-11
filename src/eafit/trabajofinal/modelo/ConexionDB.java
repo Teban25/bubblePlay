@@ -15,10 +15,10 @@ import java.sql.SQLException;
  */
 public class ConexionDB {
      /**Parametros de conexion*/
-   static String bd = "bubblePlay";
+   static String bd = "bubbleplay";
    static String login = "root";
    static String password = "";
-   static String url = "jdbc:mysql://localhost/"+bd;
+   static String url = "jdbc:mysql://localhost:3306/bubbleplay?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
    
      Connection connection = null;
      

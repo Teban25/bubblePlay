@@ -1,7 +1,10 @@
 
 package eafit.trabajofinal.swing;
 
+import eafit.trabajofinal.dao.PuntuacionDao;
+import eafit.trabajofinal.dao.PuntuacionDaoImpl;
 import eafit.trabajofinal.logicajuego.AdministracionJuego;
+import eafit.trabajofinal.modelo.Puntaje;
 import eafit.trabajofinal.objetos.Bolita;
 import eafit.trabajofinal.objetos.Colores;
 import java.awt.BasicStroke;
@@ -12,6 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -348,6 +354,13 @@ public class JuegoPrincipal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(jPTablero, "Tu puntaje fue de: " + 
                         getPuntaje(), "Finalizó el juego", JOptionPane.INFORMATION_MESSAGE);
                 tiempoJuego.stop();
+                Puntaje puntaje = new Puntaje("Sergio",getPuntaje());
+                PuntuacionDao puntuacion = new PuntuacionDaoImpl();
+                try {
+                    puntuacion.registrarPuntaje(puntaje);
+                } catch (SQLException ex) {
+                    Logger.getLogger(JuegoPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     });

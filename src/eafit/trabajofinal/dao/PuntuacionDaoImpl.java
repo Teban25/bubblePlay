@@ -49,9 +49,10 @@ while(res.next()){
     public void registrarPuntaje(Puntaje puntaje) throws SQLException {
 ConexionDB conex= new ConexionDB();
  try{
-      Statement statement = conex.getConnection().createStatement();
-   statement.executeUpdate("INSERT INTO puntuacion VALUES ('"+puntaje.getName()+"', '"
-     +puntaje.getPuntuacion()+"')");
+     System.out.println(puntaje.getName() + " " + puntaje.getPuntuacion());
+   Statement statement = conex.getConnection().createStatement();
+   statement.executeUpdate("INSERT INTO puntuacion(nombre,puntuacion) VALUES ('"+puntaje.getName()+"',"
+     +puntaje.getPuntuacion()+")");
    JOptionPane.showMessageDialog(null, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
    statement.close();
    conex.desconectar();
