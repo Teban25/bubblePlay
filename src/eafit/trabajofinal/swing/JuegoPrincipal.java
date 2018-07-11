@@ -8,17 +8,34 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 public class JuegoPrincipal extends javax.swing.JFrame {
     private AdministracionJuego playJuego;
+    private int tiempo = 0;
     private int puntaje = 0;
     private static final int ajustadorRadio = 4;
     private static final int ajustadorCoord =17;
+    
     public JuegoPrincipal() {
         initComponents();
-        playJuego = Inicio.getPlayJuego();
-        jTPuntaje.setText(String.valueOf(puntaje));
+        this.setPlayJuego(Inicio.getPlayJuego());
+        this.setPuntaje(0);
+        this.setTiempo(this.inicializarTiempo());
+        jTPuntaje.setText(String.valueOf(this.getPuntaje()));
+        jTTiempo.setText(String.valueOf(this.getTiempo()));
+    }
+    
+    private int inicializarTiempo() {
+        int tiempoInicial = this.getPlayJuego().getTablero().getBolitasX()*
+                this.getPlayJuego().getTablero().getBolitasY()*2;
+        
+        return tiempoInicial;
     }
     
     @SuppressWarnings("unchecked")
@@ -32,6 +49,10 @@ public class JuegoPrincipal extends javax.swing.JFrame {
         jLPuntaje = new javax.swing.JLabel();
         jTTiempo = new javax.swing.JTextField();
         jTPuntaje = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(330, 0));
@@ -56,7 +77,7 @@ public class JuegoPrincipal extends javax.swing.JFrame {
         );
         jPTableroLayout.setVerticalGroup(
             jPTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 253, Short.MAX_VALUE)
+            .addGap(0, 232, Short.MAX_VALUE)
         );
 
         jPDatos.setBackground(new java.awt.Color(204, 204, 204));
@@ -116,6 +137,30 @@ public class JuegoPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jMenu1.setText("Archivo");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem1.setText("Reiniciar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem2.setText("Salir");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -141,7 +186,8 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBPlayJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPlayJuegoActionPerformed
-        jBPlayJuego.setVisible(false);
+        tiempoJuego.start();
+        jBPlayJuego.setVisible(Boolean.FALSE);
         pintarTablero(jPTablero.getGraphics());
     }//GEN-LAST:event_jBPlayJuegoActionPerformed
 
@@ -156,7 +202,7 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     private void jPTableroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPTableroMouseClicked
        Graphics2D dibujador = (Graphics2D) jPTablero.getGraphics();
         if (evt.getButton() == MouseEvent.BUTTON1) {
-            boolean movimientoPermitido = playJuego.validarMovimiento(evt.getX(), evt.getY());
+            boolean movimientoPermitido = this.getPlayJuego().validarMovimiento(evt.getX(), evt.getY());
             if (movimientoPermitido) {
                 pintarSeleccionadas(dibujador);
             } else {
@@ -170,6 +216,16 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     private void jPTableroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPTableroKeyPressed
        
     }//GEN-LAST:event_jPTableroKeyPressed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Inicio nuevoJuego = new Inicio();
+        nuevoJuego.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -207,9 +263,9 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     private void pintarTablero(Graphics g){
         Graphics2D dibujador = (Graphics2D) g;
 
-        for(int i=0; i<playJuego.getTablero().getBolitasX(); i++){
-            for(int j=0; j<playJuego.getTablero().getBolitasY(); j++){
-                Bolita bolita = playJuego.getTablero().getTableroBolita()[i][j];
+        for(int i=0; i< this.getPlayJuego().getTablero().getBolitasX(); i++){
+            for(int j=0; j< this.getPlayJuego().getTablero().getBolitasY(); j++){
+                Bolita bolita = this.getPlayJuego().getTablero().getTableroBolita()[i][j];
                 dibujador.setColor(bolita.getColor());
                 dibujador.fillOval(bolita.getX() - 15, bolita.getY() - 15, Bolita.getRadio(), Bolita.getRadio());
             }
@@ -220,26 +276,26 @@ public class JuegoPrincipal extends javax.swing.JFrame {
         Graphics2D dibujador = (Graphics2D) g;
         dibujador.setColor(Color.BLACK);
         dibujador.setStroke(new BasicStroke(2));
-        int cantidadSeleccionadas = playJuego.getBolitasSeleccionadas().size();
+        int cantidadSeleccionadas = this.getPlayJuego().getBolitasSeleccionadas().size();
         for(int i=0; i<cantidadSeleccionadas; i++){
-            dibujador.drawOval(playJuego.getBolitasSeleccionadas().get(i).getX() - 15,
-                    playJuego.getBolitasSeleccionadas().get(i).getY() - 15,
+            dibujador.drawOval(this.getPlayJuego().getBolitasSeleccionadas().get(i).getX() - 15,
+                    this.getPlayJuego().getBolitasSeleccionadas().get(i).getY() - 15,
                     Bolita.getRadio(), Bolita.getRadio());
         }
     }
     
     private void borrarSeleccionadas(Graphics g){
         Graphics2D dibujador = (Graphics2D) g;
-        int cantidadSeleccionadas = playJuego.getBolitasSeleccionadas().size();
+        int cantidadSeleccionadas = this.getPlayJuego().getBolitasSeleccionadas().size();
         for(int i=0; i<cantidadSeleccionadas; i++){
-            Bolita bolita = playJuego.getBolitasSeleccionadas().get(i);
+            Bolita bolita = this.getPlayJuego().getBolitasSeleccionadas().get(i);
             borrarBolita(bolita, dibujador);
         }
         for(int i=0; i<cantidadSeleccionadas; i++){
-            Bolita bolita = playJuego.getBolitasSeleccionadas().get(i);
+            Bolita bolita = this.getPlayJuego().getBolitasSeleccionadas().get(i);
             pintarBolita(bolita, dibujador);
         }
-        playJuego.limpiarBolitasSeleccionadas();
+        this.getPlayJuego().limpiarBolitasSeleccionadas();
     }
     
     private void borrarBolita(Bolita bolita, Graphics2D g){
@@ -257,31 +313,80 @@ public class JuegoPrincipal extends javax.swing.JFrame {
     
     private void finalizarJugada(Graphics g) {
         Graphics2D dibujador = (Graphics2D) g;
-        int cantidadSeleccionadas = playJuego.getBolitasSeleccionadas().size();
+        int cantidadSeleccionadas = this.getPlayJuego().getBolitasSeleccionadas().size();
         if (cantidadSeleccionadas > 1) {
             for (int i = 0; i < cantidadSeleccionadas; i++) {
-                Color colorNuevo = playJuego.getTablero().generarColor();
-                Bolita bolita = playJuego.getBolitasSeleccionadas().get(i);
+                Color colorNuevo = this.getPlayJuego().getTablero().generarColor();
+                Bolita bolita = this.getPlayJuego().getBolitasSeleccionadas().get(i);
                 bolita.setColor(colorNuevo);
-                playJuego.getTablero().actualizarBolita(bolita);
+                this.getPlayJuego().getTablero().actualizarBolita(bolita);
                 borrarBolita(bolita, dibujador);
                 pintarBolita(bolita, dibujador);
                 
                 int puntajeBolita = Colores.getPuntajeXColor(bolita.getColor());
-                puntaje = puntaje + puntajeBolita;
+                this.setPuntaje(this.getPuntaje() + puntajeBolita);
             }
-            jTPuntaje.setText(String.valueOf(puntaje));
-            playJuego.limpiarBolitasSeleccionadas();
+            if(cantidadSeleccionadas > 3){
+                this.setTiempo(this.getTiempo() + 5);
+            }
+            jTPuntaje.setText(String.valueOf(this.getPuntaje()));
+            this.getPlayJuego().limpiarBolitasSeleccionadas();
         }
     }
     
+    Timer tiempoJuego = new Timer(1000, new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if((getTiempo() - 1) != 0){
+                setTiempo(getTiempo() - 1);
+                jTTiempo.setText(String.valueOf(getTiempo()));
+            }else{
+                setTiempo(0);
+                jTTiempo.setText(String.valueOf(getTiempo()));
+                jPTablero.setVisible(false);
+                JOptionPane.showMessageDialog(jPTablero, "Tu puntaje fue de: " + 
+                        getPuntaje(), "Finalizó el juego", JOptionPane.INFORMATION_MESSAGE);
+                tiempoJuego.stop();
+            }
+        }
+    });
+    
+    private AdministracionJuego getPlayJuego() {
+        return playJuego;
+    }
+
+    private void setPlayJuego(AdministracionJuego playJuego) {
+        this.playJuego = playJuego;
+    }
+    
+    private int getTiempo() {
+        return tiempo;
+    }
+
+    private void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    private int getPuntaje() {
+        return puntaje;
+    }
+
+    private void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBPlayJuego;
     private javax.swing.JLabel jLPuntaje;
     private javax.swing.JLabel jLTiempo;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPDatos;
     private javax.swing.JPanel jPTablero;
     private javax.swing.JTextField jTPuntaje;
     private javax.swing.JTextField jTTiempo;
     // End of variables declaration//GEN-END:variables
+
 }
