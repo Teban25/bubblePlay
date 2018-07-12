@@ -354,7 +354,7 @@ public class JuegoPrincipal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(jPTablero, "Tu puntaje fue de: " + 
                         getPuntaje(), "Finalizó el juego", JOptionPane.INFORMATION_MESSAGE);
                 tiempoJuego.stop();
-                Puntaje puntaje = new Puntaje("Sergio",getPuntaje());
+                Puntaje puntaje = new Puntaje(playJuego.getJugador(),getPuntaje());
                 PuntuacionDao puntuacion = new PuntuacionDaoImpl();
                 try {
                     puntuacion.registrarPuntaje(puntaje);

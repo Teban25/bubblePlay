@@ -5,6 +5,13 @@
  */
 package eafit.trabajofinal.swing;
 
+import eafit.trabajofinal.dao.PuntuacionDao;
+import eafit.trabajofinal.dao.PuntuacionDaoImpl;
+import eafit.trabajofinal.modelo.Puntaje;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JLabel;
+
 /**
  *
  * @author Sergio Llanos
@@ -16,6 +23,8 @@ public class Puntajes extends javax.swing.JFrame {
      */
     public Puntajes() {
         initComponents();
+        obtenerPuntuacion();
+     
     }
 
     /**
@@ -222,4 +231,17 @@ public class Puntajes extends javax.swing.JFrame {
     private javax.swing.JLabel jLTitulo;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+    private void obtenerPuntuacion() {
+        JLabel jugadorLabels[] = {jLJugador1, jLJugador2, jLJugador3};
+        JLabel puntuacionLabels[] = {jLPuntuacion1, jLPuntuacion2, jLPuntuacion3};
+        PuntuacionDao puntuacion = new PuntuacionDaoImpl();
+        List<Puntaje> puntajes = puntuacion.getAllPuntajes();
+        if(!puntajes.isEmpty()){
+            for(int i = 0; puntajes.size()>i; i++){
+            jugadorLabels[i].setText(puntajes.get(i).getName());
+            puntuacionLabels[i].setText(Integer.toString(puntajes.get(i).getPuntuacion()));
+            }
+        }
+   }
 }

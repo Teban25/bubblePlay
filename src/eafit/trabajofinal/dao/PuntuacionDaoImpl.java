@@ -28,7 +28,7 @@ public class PuntuacionDaoImpl implements PuntuacionDao{
         Puntajes = new ArrayList<Puntaje>();
         ConexionDB conex= new ConexionDB();
         try{
-            PreparedStatement consulta = conex.getConnection().prepareStatement("SELECT * FROM puntuacion");
+            PreparedStatement consulta = conex.getConnection().prepareStatement("SELECT * FROM puntuacion ORDER BY puntuacion DESC limit 3");
             ResultSet res = consulta.executeQuery();
 while(res.next()){
     Puntaje puntaje = new Puntaje("",0);

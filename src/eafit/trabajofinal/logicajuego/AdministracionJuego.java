@@ -12,6 +12,7 @@ public class AdministracionJuego {
     private int ajustadorY;
     private Tablero tablero;
     private List<Bolita> bolitasSeleccionadas;
+    private String jugador;
     
 
     //METODOS
@@ -20,7 +21,8 @@ public class AdministracionJuego {
         this.bolitasSeleccionadas = new ArrayList<>();
     }
     
-    public void crearTablero(int bolitasX, int bolitasY, int cantidadColores){
+    public void crearTablero(String nombreJugador,int bolitasX, int bolitasY, int cantidadColores){
+        jugador = nombreJugador;
         if(bolitasY >= 5){
             ajustadorY = 50;
         } else {
@@ -54,6 +56,9 @@ public class AdministracionJuego {
     
     public void limpiarBolitasSeleccionadas(){
         this.bolitasSeleccionadas.clear();
+    }
+       public String getJugador() {
+        return jugador;
     }
     
     public boolean validarMovimiento(int x, int y){
