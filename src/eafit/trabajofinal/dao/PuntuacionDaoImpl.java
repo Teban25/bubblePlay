@@ -50,9 +50,10 @@ while(res.next()){
 ConexionDB conex= new ConexionDB();
  try{
      System.out.println(puntaje.getName() + " " + puntaje.getPuntuacion());
-   Statement statement = conex.getConnection().createStatement();
-   statement.executeUpdate("INSERT INTO puntuacion(nombre,puntuacion) VALUES ('"+puntaje.getName()+"',"
-     +puntaje.getPuntuacion()+")");
+   PreparedStatement statement = conex.getConnection().prepareStatement("INSERT INTO puntuacion(nombre,puntuacion) VALUES (?,?)");
+    statement.setString(1, puntaje.getName());
+    statement.setString(2, Integer.toString(puntaje.getPuntuacion()));
+    statement.executeUpdate();
    JOptionPane.showMessageDialog(null, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
    statement.close();
    conex.desconectar();
